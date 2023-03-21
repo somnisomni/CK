@@ -1,2 +1,3 @@
 assignment/
 *.dSYM/
+.DS_Store
