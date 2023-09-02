@@ -1,5 +1,11 @@
 __pycache__/
-assignment/
 *.dSYM/
-.DS_Store
 *.ignore.*
+
+*.exe
+*.ilk
+*.obj
+*.pdb
+
+.DS_Store
+Thumbs.db
