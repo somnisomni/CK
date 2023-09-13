@@ -3,7 +3,7 @@
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
 HINSTANCE g_hInst;
-LPCTSTR lpszClass = TEXT("GDI Text Output");
+LPCTSTR lpszClass = TEXT("WM_CHAR");
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdParam, int nCmdShow) {
 	HWND hWnd;
@@ -27,7 +27,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmd
 		NULL, (HMENU)NULL, hInstance, NULL);
 	ShowWindow(hWnd, nCmdShow);
 
-	while (GetMessage(&Message, NULL, 0, 0)) {
+	while(GetMessage(&Message, NULL, 0, 0)) {
 		TranslateMessage(&Message);
 		DispatchMessage(&Message);
 	}
@@ -36,18 +36,44 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmd
 }
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam) {
-	HDC hDC;
+	HDC hdc;
 	PAINTSTRUCT ps;
+	static char ch[] = "A";
+	static int x = 100;
+	static int y = 100;
 
-	switch (iMessage) {
-	case WM_DESTROY:
-		PostQuitMessage(0);
-		return 0;
-	case WM_PAINT:
-		hDC = BeginPaint(hWnd, &ps);
-		TextOut(hDC, 100, 100, TEXT("Hello World"), 11);
-		EndPaint(hWnd, &ps);
-		return 0;
+	switch(iMessage) {
+		case WM_DESTROY:
+			PostQuitMessage(0);
+			return 0;
+		case WM_KEYDOWN:
+			switch(wParam) {
+				case VK_SPACE:
+					// ch[0] += 1;
+					// if(ch[0] > 'Z') ch[0] = 'A';
+					if(ch[0] == 'A') ch[0] = 'Z';
+					else ch[0] = 'A';
+					break;
+				case VK_LEFT:
+					x -= 8;
+					break;
+				case VK_RIGHT:
+					x += 8;
+					break;
+				case VK_UP:
+					y -= 8;
+					break;
+				case VK_DOWN:
+					y += 8;
+					break;
+			}
+			InvalidateRect(hWnd, NULL, FALSE);
+			return 0;
+		case WM_PAINT:
+			hdc = BeginPaint(hWnd, &ps);
+			TextOut(hdc, x, y, LPCWSTR(ch), 1);
+			EndPaint(hWnd, &ps);
+			return 0;
 	}
 
 	return (DefWindowProc(hWnd, iMessage, wParam, lParam));
