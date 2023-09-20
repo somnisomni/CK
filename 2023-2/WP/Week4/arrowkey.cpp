@@ -41,15 +41,15 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 	HPEN myPen, oldPen;
 	HBRUSH myBrush, oldBrush;
 
-	RECT rTop = { 150, 50, 250, 150 };
-	RECT rLeft = { 50, 150, 150, 250 };
-	RECT rRight = { 250, 150, 350, 250 };
-	RECT rBottom = { 150, 250, 250, 350 };
+	const RECT rTop = { 150, 50, 250, 150 };
+	const RECT rLeft = { 50, 150, 150, 250 };
+	const RECT rRight = { 250, 150, 350, 250 };
+	const RECT rBottom = { 150, 250, 250, 350 };
 
-	const wchar_t *tTop = TEXT("À§ÂÊ");
-	const wchar_t *tLeft = TEXT("¿ÞÂÊ");
-	const wchar_t *tRight = TEXT("¿À¸¥ÂÊ");
-	const wchar_t *tBottom = TEXT("¾Æ·¡ÂÊ");
+	const wchar_t *tTop = TEXT("ìœ„ìª½");
+	const wchar_t *tLeft = TEXT("ì™¼ìª½");
+	const wchar_t *tRight = TEXT("ì˜¤ë¥¸ìª½");
+	const wchar_t *tBottom = TEXT("ì•„ëž˜ìª½");
 
 	// UP, LEFT, RIGHT, BOTTOM
 	static bool keys[] = { false, false, false, false };
@@ -57,30 +57,48 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 	switch(iMessage) {
 		case WM_PAINT:
 		{
+			/* SETUP */
 			hdc = BeginPaint(hWnd, &ps);
-			myBrush = CreateSolidBrush(RGB(255, 255, 255));
+			myBrush = CreateSolidBrush(RGB(255, 0, 0));
 			oldBrush = (HBRUSH)SelectObject(hdc, myBrush);
 			myPen = CreatePen(PS_SOLID, 5, RGB(0, 0, 0));
 			oldPen = (HPEN)SelectObject(hdc, myPen);
 
+			/* RECT DRAW */
+			// UP
 			if(keys[0]) SelectObject(hdc, myBrush);
 			Rectangle(hdc, rTop.left, rTop.top, rTop.right, rTop.bottom);
-			TextOut(hdc, rTop.left + 30, rTop.top + 30, tTop, wcslen(tTop));
 			SelectObject(hdc, oldBrush);
 
+                        // LEFT
+			if(keys[1]) SelectObject(hdc, myBrush);
 			Rectangle(hdc, rLeft.left, rLeft.top, rLeft.right, rLeft.bottom);
-			TextOut(hdc, rLeft.left + 30, rLeft.top + 30, tLeft, wcslen(tLeft));
+			SelectObject(hdc, oldBrush);
 
+                        // RIGHT
+			if(keys[2]) SelectObject(hdc, myBrush);
 			Rectangle(hdc, rRight.left, rRight.top, rRight.right, rRight.bottom);
-			TextOut(hdc, rRight.left + 30, rRight.top + 30, tRight, wcslen(tRight));
+			SelectObject(hdc, oldBrush);
 
+			// BOTTOM
+			if(keys[3]) SelectObject(hdc, myBrush);
 			Rectangle(hdc, rBottom.left, rBottom.top, rBottom.right, rBottom.bottom);
-			TextOut(hdc, rBottom.left + 30, rBottom.top + 30, tBottom, wcslen(tBottom));
+			SelectObject(hdc, oldBrush);
 
+			/* TEXT DRAW */
+			TextOut(hdc, rTop.left + 20, rTop.bottom + 20, tTop, wcslen(tTop));
+			TextOut(hdc, rLeft.left + 20, rLeft.bottom + 20, tLeft, wcslen(tLeft));
+			TextOut(hdc, rRight.left + 20, rRight.bottom + 20, tRight, wcslen(tRight));
+			TextOut(hdc, rBottom.left + 20, rBottom.bottom + 20, tBottom, wcslen(tBottom));
+
+			/* CLEANUP */
 			EndPaint(hWnd, &ps);
+			DestroyObject(myBrush);
+			DestroyObject(myPen);
 			break;
 		}
 		case WM_KEYDOWN:
+                case WM_KEYUP:
 			keys[0] = wParam == VK_UP;
 			keys[1] = wParam == VK_LEFT;
 			keys[2] = wParam == VK_RIGHT;
@@ -92,5 +110,5 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 			return 0;
 	}
 
-	return (DefWindowProc(hWnd, iMessage, wParam, lParam));;
+	return (DefWindowProc(hWnd, iMessage, wParam, lParam));
 }
