@@ -1,11 +1,15 @@
 #include <Windows.h>
+#include <stdlib.h>
+#include <time.h>
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
 HINSTANCE g_hInst;
-LPCTSTR lpszClass = TEXT("WM_CHAR");
+LPCTSTR lpszClass = TEXT("Caret");
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdParam, int nCmdShow) {
+	srand((unsigned)time(NULL));
+
 	HWND hWnd;
 	MSG Message;
 	WNDCLASS WndClass;
@@ -38,43 +42,32 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmd
 LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam) {
 	HDC hdc;
 	PAINTSTRUCT ps;
-	static char ch[] = "A";
-	static int x = 100;
-	static int y = 100;
+	HPEN myPen, oldPen;
+	HBRUSH myBrush, oldBrush;
 
 	switch(iMessage) {
+		case WM_PAINT:
+		{
+			hdc = BeginPaint(hWnd, &ps);
+			myBrush = CreateSolidBrush(RGB(255, 0, 0));
+			oldBrush = (HBRUSH)SelectObject(hdc, myBrush);
+			myPen = CreatePen(PS_SOLID, 5, RGB(0, 0, 0));
+			oldPen = (HPEN)SelectObject(hdc, myPen);
+
+			Ellipse(hdc, 100, 100, 300, 300);
+
+			SelectObject(hdc, oldBrush);
+			SelectObject(hdc, oldPen);
+			DeleteObject(myBrush);
+			DeleteObject(myPen);
+
+			EndPaint(hWnd, &ps);
+			break;
+		}
 		case WM_DESTROY:
 			PostQuitMessage(0);
 			return 0;
-		case WM_KEYDOWN:
-			switch(wParam) {
-				case VK_SPACE:
-					// ch[0] += 1;
-					// if(ch[0] > 'Z') ch[0] = 'A';
-					if(ch[0] == 'A') ch[0] = 'Z';
-					else ch[0] = 'A';
-					break;
-				case VK_LEFT:
-					x -= 8;
-					break;
-				case VK_RIGHT:
-					x += 8;
-					break;
-				case VK_UP:
-					y -= 8;
-					break;
-				case VK_DOWN:
-					y += 8;
-					break;
-			}
-			InvalidateRect(hWnd, NULL, FALSE);
-			return 0;
-		case WM_PAINT:
-			hdc = BeginPaint(hWnd, &ps);
-			TextOut(hdc, x, y, LPCWSTR(ch), 1);
-			EndPaint(hWnd, &ps);
-			return 0;
 	}
 
-	return (DefWindowProc(hWnd, iMessage, wParam, lParam));
+	return (DefWindowProc(hWnd, iMessage, wParam, lParam));;
 }
