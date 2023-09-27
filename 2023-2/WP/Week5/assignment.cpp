@@ -94,10 +94,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
           break;
       }
 
-      if(x + radius * 3 > clientRect.right
-        || x - radius * 3 < clientRect.left
-        || y + radius * 3 > clientRect.bottom
-        || y - radius * 3 < clientRect.top) {
+      // step is radius * 2
+      if(x + radius * 3 > clientRect.right      // circle right(x + radius) + step  > window right
+        || x - radius * 3 < clientRect.left     // circle left(x - radius) - step   < window left
+        || y + radius * 3 > clientRect.bottom   // circle bottom(y + radius) + step > window bottom
+        || y - radius * 3 < clientRect.top) {   // circle top(y - radius) - step    < window top
         wall = true;
       }
 
