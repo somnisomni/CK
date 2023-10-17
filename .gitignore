@@ -1,11 +1,23 @@
+# Ignore all extension-less files
+*
+!*.*
+!*/
+
+# Python
 __pycache__/
+
+# macOS build files
 *.dSYM/
+
+# custom ignore files
 *.ignore.*
 
+# Windows build files
 *.exe
 *.ilk
 *.obj
 *.pdb
 
+# OS metadata files
 .DS_Store
 Thumbs.db
