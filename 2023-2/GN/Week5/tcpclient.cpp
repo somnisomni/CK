@@ -3,7 +3,7 @@
 #define SERVER_PORT 9000
 #define BUFFER_SIZE 1024
 
-char *SERVER_IP = (char *)"127.0.0.1";
+char *SERVER_IP = (char *)"192.168.30.248";
 
 int main(int argc, char *argv[]) {
   int retval = 0;
@@ -27,7 +27,7 @@ int main(int argc, char *argv[]) {
   inet_pton(AF_INET, SERVER_IP, &serverAddr.sin_addr);
   serverAddr.sin_port = htons(SERVER_PORT);
 
-  retval = connect(sock, (struct sockaddr *) &serverAddr, sizeof(serverAddr));
+  retval = connect(sock, (struct sockaddr *)&serverAddr, sizeof(serverAddr));
   if(retval == SOCKET_ERROR) {
     err_quit("Connect failed");
   }
