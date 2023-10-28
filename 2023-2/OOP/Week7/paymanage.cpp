@@ -1,4 +1,4 @@
-#include <iostream>
+﻿#include <iostream>
 #include <string>
 #include <cstring>
 using namespace std;
@@ -6,9 +6,9 @@ using namespace std;
 class PermanentWorker {
   private:
     char name[100];
-    uint salary;
+    unsigned int salary;
   public:
-    PermanentWorker(const char *n, const uint s): salary(s) {
+    PermanentWorker(const char *n, const unsigned int s): salary(s) {
       strcpy(name, n);
     }
     float getPay() const { return salary / 12.0f; }
@@ -38,11 +38,11 @@ class EmployeeHandler {
       }
     }
     void showTotalSalary() const {
-      uint total = 0;
+      unsigned int total = 0;
       for(int i = 0; i < empNum; i++) {
         total += empList[i]->getPay();
       }
-      
+
       cout << "이번달 급여 총액: " << total << endl;
     }
 };
@@ -55,4 +55,6 @@ int main() {
 
   handler.showAllSalaryInfo();
   handler.showTotalSalary();
+
+  return 0;
 }

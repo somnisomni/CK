@@ -1,4 +1,4 @@
-#include <iostream>
+﻿#include <iostream>
 using namespace std;
 
 class Gun {
@@ -75,7 +75,7 @@ int main() {
   pMan2.showHandcuff();
 
   cout << endl << endl;
-  
+
   pMan1.showAll();
   cout << endl;
   pMan2.showAll();
