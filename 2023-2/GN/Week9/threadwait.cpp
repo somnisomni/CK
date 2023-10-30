@@ -17,7 +17,7 @@ DWORD WINAPI ThreadCallback(LPVOID arg) {
 }
 
 int main() {
-  long long int num = 3456789010L;
+  long long int num = 200000000L;
 
   HANDLE thread = CreateThread(NULL, 0, ThreadCallback, (LPVOID)(long long int) num, CREATE_SUSPENDED, NULL);
   printf("[ Main Thread ] Child thread created in suspended status. \n");
