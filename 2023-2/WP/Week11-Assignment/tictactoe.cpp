@@ -4,8 +4,6 @@
 #include "resource.h"
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
-INT_PTR CALLBACK DlgProc(HWND, UINT, WPARAM, LPARAM);
-INT_PTR CALLBACK CalcDlgProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK TTTDlgProc(HWND, UINT, WPARAM, LPARAM);
 
 HINSTANCE g_hInst;
@@ -59,12 +57,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
       break;
     case WM_COMMAND:
       switch(LOWORD(wParam)) {
-        case ID_MENU_OPENDIALOG:
-          DialogBox(g_hInst, MAKEINTRESOURCE(IDD_DIALOG1), hWnd, DlgProc);
-          break;
-        case ID_MENU_CALC:
-          DialogBox(g_hInst, MAKEINTRESOURCE(IDD_DIALOG2), hWnd, CalcDlgProc);
-          break;
         case ID_MENU_TTT:
           DialogBox(g_hInst, MAKEINTRESOURCE(IDD_DIALOG_TTT), hWnd, TTTDlgProc);
           break;
@@ -78,102 +70,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
   return (DefWindowProc(hWnd, iMessage, wParam, lParam));
 }
 
-INT_PTR CALLBACK DlgProc(HWND hDlgWnd, UINT iMessage, WPARAM wParam, LPARAM lParam) {
-  HDC hdc;
-  HWND button = NULL;
-
-  switch(iMessage) {
-    case WM_INITDIALOG:
-      SetDlgItemText(hDlgWnd, IDC_EDIT_STR, str);
-      SetDlgItemInt(hDlgWnd, IDC_EDIT_X, x, FALSE);
-      SetDlgItemInt(hDlgWnd, IDC_EDIT_Y, y, FALSE);
-
-      button = GetDlgItem(hDlgWnd, ID_PAUSE);
-      EnableWindow(button, FALSE);
-
-      return (INT_PTR)TRUE;
-    case WM_COMMAND:
-      switch(LOWORD(wParam)) {
-        case IDC_BTN_COPYTEXT:
-          TCHAR strCopied[128];
-          GetDlgItemText(hDlgWnd, IDC_EDIT_STR, str, 128);
-          lstrcpy(strCopied, str);
-          SetDlgItemText(hDlgWnd, IDC_EDIT_COPIED, strCopied);
-          break;
-        case IDC_BTN_DELETETEXT:
-          SetDlgItemText(hDlgWnd, IDC_EDIT_COPIED, TEXT(""));
-          break;
-        case ID_START:
-          button = GetDlgItem(hDlgWnd, ID_START);
-          EnableWindow(button, FALSE);
-          button = GetDlgItem(hDlgWnd, ID_PAUSE);
-          EnableWindow(button, TRUE);
-
-          GetDlgItemText(hDlgWnd, IDC_EDIT_STR, str, 128);
-          x = GetDlgItemInt(hDlgWnd, IDC_EDIT_X, NULL, FALSE);
-          y = GetDlgItemInt(hDlgWnd, IDC_EDIT_Y, NULL, FALSE);
-
-          InvalidateRect(GetParent(hDlgWnd), NULL, TRUE);
-          EndDialog(hDlgWnd, 0);
-          break;
-        case ID_PAUSE:
-          button = GetDlgItem(hDlgWnd, ID_START);
-          EnableWindow(button, TRUE);
-          button = GetDlgItem(hDlgWnd, ID_PAUSE);
-          EnableWindow(button, FALSE);
-
-          break;
-        case ID_CLOSE:
-          EndDialog(hDlgWnd, 0);
-          break;
-      }
-      break;
-  }
-
-  return (INT_PTR)FALSE;
-}
-
-INT_PTR CALLBACK CalcDlgProc(HWND hDlgWnd, UINT iMessage, WPARAM wParam, LPARAM lParam) {
-  int num1 = 0, num2 = 0, result = 0;
-
-  switch(iMessage) {
-    case WM_INITDIALOG:
-      return (INT_PTR)TRUE;
-    case WM_COMMAND:
-      if(LOWORD(wParam) == IDCANCEL) {
-        EndDialog(hDlgWnd, 0);
-        break;
-      }
-      
-      num1 = GetDlgItemInt(hDlgWnd, IDC_NUM1, NULL, TRUE);
-      num2 = GetDlgItemInt(hDlgWnd, IDC_NUM2, NULL, TRUE);
-      result = 0;
-
-      switch(LOWORD(wParam)) {
-        case IDC_PLUS:
-          SetDlgItemInt(hDlgWnd, IDC_RESULT, num1 + num2, TRUE);
-          break;
-        case IDC_MINUS:
-          SetDlgItemInt(hDlgWnd, IDC_RESULT, num1 - num2, TRUE);
-          break;
-        case IDC_MULTIPLY:
-          SetDlgItemInt(hDlgWnd, IDC_RESULT, num1 * num2, TRUE);
-          break;
-        case IDC_DIVIDE:
-          if(num2 != 0) {
-            SetDlgItemInt(hDlgWnd, IDC_RESULT, num1 / num2, TRUE);
-          } else {
-            SetDlgItemText(hDlgWnd, IDC_RESULT, TEXT("0으로 나눌 수 없음"));
-          }
-          break;
-      }
-
-      // SetDlgItemInt(hDlgWnd, IDC_RESULT, result, TRUE);    // Stack overflow???
-      break;
-  }
-
-  return (INT_PTR)FALSE;
-}
 
 enum TTTCELL {
   EMPTY,
@@ -181,44 +77,156 @@ enum TTTCELL {
   P2
 };
 
-INT_PTR CALLBACK TTTDlgProc(HWND hDlgWnd, UINT iMessage, WPARAM wParam, LPARAM lParam) {
-  static unsigned int idMap[9] = {
+class TTTMap {
+  private:
+    HWND hDlgWnd;
+    TTTCELL map[9];
+    const static UINT ID_MAP[9];
+    const static int CHECK_MAP[][4][3];
+  public:
+    TTTMap(HWND hDlgWnd): hDlgWnd(hDlgWnd) {
+      for(int i = 0; i < 9; i++) map[i] = EMPTY;
+    }
+
+    TTTCELL get(int pos) const {
+      if(pos < 0 || pos > 8) return EMPTY;
+      return map[pos];
+    }
+
+    void set(int pos, TTTCELL cell) {
+      if(pos < 0 || pos > 8) return;
+      map[pos] = cell;
+      setButtonStatus(pos, FALSE);
+      setButtonText(pos, cell == P1 ? TEXT("O") : TEXT("X"));
+    }
+
+    void reset() {
+      for(int i = 0; i < 9; i++) {
+        map[i] = EMPTY;
+        setButtonStatus(i, FALSE);
+        setButtonText(i, TEXT(""));
+      }
+    }
+
+    void enableAllButtons()  const { for(int i = 0; i < 9; i++) setButtonStatus(i, TRUE);  }
+    void disableAllButtons() const { for(int i = 0; i < 9; i++) setButtonStatus(i, FALSE); }
+
+    void setButtonStatus(int pos, BOOL status) const {
+      if(pos < 0 || pos > 8) return;
+      EnableWindow(GetDlgItem(hDlgWnd, ID_MAP[pos]), status);
+    }
+
+    void setButtonText(int pos, LPCTSTR text) const {
+      if(pos < 0 || pos > 8) return;
+      SetDlgItemText(hDlgWnd, ID_MAP[pos], text);
+    }
+
+    BOOL compareButtonId(int pos, UINT compareId) const {
+      if(pos < 0 || pos > 8) return FALSE;
+      return ID_MAP[pos] == compareId;
+    }
+
+    BOOL isFull() const {
+      for(int i = 0; i < 9; i++) if(map[i] == EMPTY) return FALSE;
+      return TRUE;
+    }
+
+    BOOL checkAcceptable(TTTCELL curPlayer, int curPos) const {
+      if(curPos < 0 || curPos > 8) return FALSE;
+
+      BOOL acceptable = FALSE;
+      for(int i = 0; i < 4; i++) {
+        if(CHECK_MAP[curPos][i][0] == -1) break;
+        if(map[CHECK_MAP[curPos][i][0]] == curPlayer &&
+          map[CHECK_MAP[curPos][i][1]] == curPlayer &&
+          map[CHECK_MAP[curPos][i][2]] == curPlayer) {
+          acceptable = TRUE;
+          break;
+        }
+      }
+      return acceptable;
+    }
+};
+
+const UINT TTTMap::ID_MAP[9] = {
     IDC_TT_1, IDC_TT_2, IDC_TT_3,
     IDC_TT_4, IDC_TT_5, IDC_TT_6,
     IDC_TT_7, IDC_TT_8, IDC_TT_9
-  };
-  static TTTCELL checkMap[9] = {
-    EMPTY, EMPTY, EMPTY,
-    EMPTY, EMPTY, EMPTY,
-    EMPTY, EMPTY, EMPTY
-  };
-  static bool currentTurn = false;  // false: P1, true: P2
-  static LPCTSTR P1_TEXT = TEXT("O");
-  static LPCTSTR P2_TEXT = TEXT("X");
+};
+#define MAPNULL {-1, -1, -1}
+const int TTTMap::CHECK_MAP[][4][3] = {
+  /* 0 */ {{0, 3, 6}, {0, 1, 2}, {0, 4, 8},   MAPNULL},
+  /* 1 */ {{1, 4, 7}, {0, 1, 2},   MAPNULL,   MAPNULL},
+  /* 2 */ {{2, 5, 8}, {0, 1, 2}, {2, 4, 6},   MAPNULL},
+  /* 3 */ {{0, 3, 6}, {3, 4, 5},   MAPNULL,   MAPNULL},
+  /* 4 */ {{1, 4, 7}, {3, 4, 5}, {2, 4, 6}, {0, 4, 8}},
+  /* 5 */ {{2, 5, 8}, {3, 4, 5},   MAPNULL,   MAPNULL},
+  /* 6 */ {{0, 3, 6}, {6, 7, 8}, {2, 4, 6},   MAPNULL},
+  /* 7 */ {{1, 4, 7}, {6, 7, 8},   MAPNULL,   MAPNULL},
+  /* 8 */ {{2, 5, 8}, {6, 7, 8}, {0, 4, 8},   MAPNULL}
+};
+
+INT_PTR CALLBACK TTTDlgProc(HWND hDlgWnd, UINT iMessage, WPARAM wParam, LPARAM lParam) {
+  static TTTMap map          = TTTMap(hDlgWnd);
+  static BOOL   currentTurn  = FALSE;  // false: P1, true: P2
+  static WCHAR  P1_NAME[128] = L"Player 1";
+  static WCHAR  P2_NAME[128] = L"Player 2";
 
   switch(iMessage) {
     case WM_INITDIALOG:
+      /* RESET ALL */
+      SetWindowText(hDlgWnd, TEXT("틱택토!")); 
+
+      SetDlgItemText(hDlgWnd, IDC_TTT_EDIT_P1, P1_NAME);
+      SetDlgItemText(hDlgWnd, IDC_TTT_EDIT_P2, P2_NAME);
+      EnableWindow(GetDlgItem(hDlgWnd, IDC_TTT_EDIT_P1), TRUE);
+      EnableWindow(GetDlgItem(hDlgWnd, IDC_TTT_EDIT_P2), TRUE);
+      EnableWindow(GetDlgItem(hDlgWnd, IDC_TTT_START), TRUE);
+      EnableWindow(GetDlgItem(hDlgWnd, IDC_TTT_RESET), FALSE);
+      currentTurn = FALSE;
+      ShowWindow(GetDlgItem(hDlgWnd, IDC_TTT_P1_CURTURNTEXT), currentTurn ? SW_HIDE : SW_SHOW);
+      ShowWindow(GetDlgItem(hDlgWnd, IDC_TTT_P2_CURTURNTEXT), currentTurn ? SW_SHOW : SW_HIDE);
+      map.reset();
+
       return (INT_PTR)TRUE;
     case WM_COMMAND:
       switch(LOWORD(wParam)) {
         case IDCANCEL:
           EndDialog(hDlgWnd, 0);
           break;
-        case IDC_TTT_RESTART:
+        case IDC_TTT_RESET:
+          SendMessage(hDlgWnd, WM_INITDIALOG, NULL, NULL);
           break;
         case IDC_TTT_START:
+          GetDlgItemText(hDlgWnd, IDC_TTT_EDIT_P1, P1_NAME, 128);
+          GetDlgItemText(hDlgWnd, IDC_TTT_EDIT_P2, P2_NAME, 128);
+          EnableWindow(GetDlgItem(hDlgWnd, IDC_TTT_EDIT_P1), FALSE);
+          EnableWindow(GetDlgItem(hDlgWnd, IDC_TTT_EDIT_P2), FALSE);
+          EnableWindow(GetDlgItem(hDlgWnd, IDC_TTT_START), FALSE);
+          EnableWindow(GetDlgItem(hDlgWnd, IDC_TTT_RESET), TRUE);
+          map.enableAllButtons();
           break;
       }
 
       int curPos = -1;
-      for(int i = 0; i < 9; i++) if(LOWORD(wParam) == idMap[i]) curPos = i;
+      for(int i = 0; i < 9; i++) if(map.compareButtonId(i, LOWORD(wParam))) curPos = i;
       if(curPos < 0) break;
 
-      checkMap[curPos] = currentTurn ? P2 : P1;
-      EnableWindow(GetDlgItem(hDlgWnd, idMap[curPos]), FALSE);
-      SetDlgItemText(hDlgWnd, idMap[curPos], currentTurn ? P2_TEXT : P1_TEXT);
+      map.set(curPos, currentTurn ? P2 : P1);
+
+      if(map.checkAcceptable(currentTurn ? P2 : P1, curPos)) {
+        MessageBox(hDlgWnd, currentTurn ? P2_NAME : P1_NAME, TEXT("Win!"), MB_OK);
+        map.disableAllButtons();
+        break;
+      } else {
+        if(map.isFull()) {
+          MessageBox(hDlgWnd, TEXT("Draw!"), TEXT("GAME OVER"), MB_OK);
+        }
+      }
 
       currentTurn = !currentTurn;
+      ShowWindow(GetDlgItem(hDlgWnd, IDC_TTT_P1_CURTURNTEXT), currentTurn ? SW_HIDE : SW_SHOW);
+      ShowWindow(GetDlgItem(hDlgWnd, IDC_TTT_P2_CURTURNTEXT), currentTurn ? SW_SHOW : SW_HIDE);
 
       /* // computer random
       while(true) {
