@@ -2,6 +2,8 @@
 // 청강문화산업대학교 게임콘텐츠스쿨 CMG
 // 본 수업 자료 및 관련 동영상은 수강 학생의 학습 목적 이외로는 배포 및 활용할 수 없습니다.
 
+#pragma once
+
 #define	_CRT_SECURE_NO_WARNINGS
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
 
@@ -49,4 +51,3 @@ void err_display(int errcode) {
   printf("[오류] %s\n", (char *)lpMsgBuf);
   LocalFree(lpMsgBuf);
 }
-
