@@ -18,6 +18,7 @@ class ArrayStack {
     void push(T item) { isFull() ? -1 : stack[topIdx++] = item; }
     void pop() { isEmpty() ? -1 : topIdx--; }
     T getTop() { return isEmpty() ? T() : stack[topIdx - 1]; }
+    int getMax() const { return max; }
     bool isEmpty() { return topIdx == 0; }
     bool isFull() { return topIdx == max; }
 };
