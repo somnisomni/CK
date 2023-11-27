@@ -14,6 +14,8 @@
 using namespace std;
 
 typedef int SOCKET;
+#define packedstruct struct __attribute__((packed))
+#define issockerr(x) (x < 0)
 
 void err_display(const char *msg) {
   cout << "¿À·ù: " << msg << endl;
