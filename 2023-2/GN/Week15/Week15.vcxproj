@@ -29,8 +29,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{88b71638-87aa-49b1-8f63-546aa1da33db}</ProjectGuid>
-    <RootNamespace>Week11</RootNamespace>
+    <ProjectGuid>{4b92c55c-0049-4ed4-9160-07d320c906a4}</ProjectGuid>
+    <RootNamespace>Week15</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -175,24 +175,25 @@
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="broadcastreceiver.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="broadcastsender.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="udpclient.cpp">
+    <ClInclude Include="PrjClient.h" />
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="PrjClient.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="PrjClient.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">false</ExcludedFromBuild>
-      <DeploymentContent>false</DeploymentContent>
     </ClCompile>
-    <ClCompile Include="udpserver.cpp">
+    <ClCompile Include="PrjServer.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">true</ExcludedFromBuild>
     </ClCompile>
   </ItemGroup>

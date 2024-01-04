@@ -29,8 +29,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{88b71638-87aa-49b1-8f63-546aa1da33db}</ProjectGuid>
-    <RootNamespace>Week11</RootNamespace>
+    <ProjectGuid>{7b5b8f27-1195-4bc4-9991-6455ab0a826a}</ProjectGuid>
+    <RootNamespace>Week13</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -182,19 +182,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="broadcastreceiver.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="broadcastsender.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="udpclient.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">false</ExcludedFromBuild>
-      <DeploymentContent>false</DeploymentContent>
-    </ClCompile>
-    <ClCompile Include="udpserver.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClInclude Include="base.h" />
+    <ClInclude Include="bfs.h" />
+    <ClInclude Include="gamemap.h" />
+    <ClInclude Include="node.h" />
+    <ClInclude Include="pointerqueue.h" />
+    <ClInclude Include="util.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="bfsgame.cpp" />
+    <ClCompile Include="util.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
