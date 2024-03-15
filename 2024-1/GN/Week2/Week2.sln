@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UDPServer", "UDPServer\UDPServer.csproj", "{4AB4D1A1-7703-404D-8F6C-1239E54F7316}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UDPClient", "UDPClient\UDPClient.csproj", "{55193B95-7D55-4211-932A-05C14A8AA5A2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4AB4D1A1-7703-404D-8F6C-1239E54F7316}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4AB4D1A1-7703-404D-8F6C-1239E54F7316}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4AB4D1A1-7703-404D-8F6C-1239E54F7316}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4AB4D1A1-7703-404D-8F6C-1239E54F7316}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55193B95-7D55-4211-932A-05C14A8AA5A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55193B95-7D55-4211-932A-05C14A8AA5A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55193B95-7D55-4211-932A-05C14A8AA5A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55193B95-7D55-4211-932A-05C14A8AA5A2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
