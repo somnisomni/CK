@@ -6,6 +6,9 @@ class Point:
     self.x = x
     self.y = y
 
+  def nparray(self):
+    return np.array([self.x, self.y])
+
 SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 720
 CENTER_POINT = Point(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
@@ -48,11 +51,11 @@ while running:
   mulVec = np.array([[MULTIPLIER, 0],
                     [0, MULTIPLIER]])
 
-  resultVec = np.matmul(mulVec, whVec)
+  resultVec = np.matmul(mulVec, whVec) + ORIGIN.nparray()
 
   pygame.draw.polygon(screen, RECTCOLOR, convertAxis([
-    (ORIGIN.x, ORIGIN.y),
-    (ORIGIN.x, resultVec[1]),
+    (ORIGIN.x,     ORIGIN.y),
+    (ORIGIN.x,     resultVec[1]),
     (resultVec[0], resultVec[1]),
     (resultVec[0], ORIGIN.y)
   ]))

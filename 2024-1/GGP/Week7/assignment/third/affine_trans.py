@@ -7,7 +7,7 @@ class Point:
     self.y = y
 
   def nparray(self):
-    return np.array([self.x, self.y])
+    return np.array([self.x, self.y, 0])
 
 SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 720
@@ -44,22 +44,23 @@ while running:
   RECT_HEIGHT = 100
   ORIGIN = Point(0, 0)
   RECTCOLOR = (255, 0, 0)
-  ROT_DEGREES = 30
+  TRANSLATE_X = 50
+  TRANSLATE_Y = 50
 
   whVec = np.array([RECT_WIDTH,
-                    RECT_HEIGHT])
-  rotVec = np.array([
-    [np.cos(np.radians(ROT_DEGREES)), -np.sin(np.radians(ROT_DEGREES))],
-    [np.sin(np.radians(ROT_DEGREES)),  np.cos(np.radians(ROT_DEGREES))]
-  ])
+                    RECT_HEIGHT,
+                    1])
+  transVec = np.array([[1, 0, ORIGIN.x + TRANSLATE_X],
+                       [0, 1, ORIGIN.y + TRANSLATE_Y],
+                       [0, 0, 1]])
 
-  resultVec = np.matmul(rotVec, whVec) + ORIGIN.nparray()
+  resultVec = np.matmul(transVec, whVec)
 
   pygame.draw.polygon(screen, RECTCOLOR, convertAxis([
-    (ORIGIN.x,     ORIGIN.y),
-    (rotVec[0, 0] * RECT_WIDTH + ORIGIN.x, rotVec[1, 0] * RECT_HEIGHT + ORIGIN.y),
-    (resultVec[0], resultVec[1]),
-    (rotVec[0, 1] * RECT_WIDTH + ORIGIN.x, rotVec[1, 1] * RECT_HEIGHT + ORIGIN.y)
+    (transVec[0, 2], transVec[1, 2]),
+    (transVec[0, 2], resultVec[1]),
+    (resultVec[0],   resultVec[1]),
+    (resultVec[0],   transVec[1, 2])
   ]))
   # === === #
 

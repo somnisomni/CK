@@ -7,7 +7,7 @@ class Point:
     self.y = y
 
   def nparray(self):
-    return np.array([self.x, self.y])
+    return np.array([self.x, self.y, 0])
 
 SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 720
@@ -47,10 +47,12 @@ while running:
   ROT_DEGREES = 30
 
   whVec = np.array([RECT_WIDTH,
-                    RECT_HEIGHT])
+                    RECT_HEIGHT,
+                    1])
   rotVec = np.array([
-    [np.cos(np.radians(ROT_DEGREES)), -np.sin(np.radians(ROT_DEGREES))],
-    [np.sin(np.radians(ROT_DEGREES)),  np.cos(np.radians(ROT_DEGREES))]
+    [np.cos(np.radians(ROT_DEGREES)), -np.sin(np.radians(ROT_DEGREES)), 0],
+    [np.sin(np.radians(ROT_DEGREES)),  np.cos(np.radians(ROT_DEGREES)), 0],
+    [0, 0, 1]
   ])
 
   resultVec = np.matmul(rotVec, whVec) + ORIGIN.nparray()
