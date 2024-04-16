@@ -46,20 +46,20 @@ while running:
   RECTCOLOR = (255, 0, 0)
   ROT_DEGREES = 30
 
-  whVec = np.array([RECT_WIDTH,
-                    RECT_HEIGHT])
-  rotVec = np.array([
+  whM = np.array([RECT_WIDTH,
+                  RECT_HEIGHT])
+  rotM = np.array([
     [np.cos(np.radians(ROT_DEGREES)), -np.sin(np.radians(ROT_DEGREES))],
     [np.sin(np.radians(ROT_DEGREES)),  np.cos(np.radians(ROT_DEGREES))]
   ])
 
-  resultVec = np.matmul(rotVec, whVec) + ORIGIN.nparray()
+  resultM = np.matmul(rotM, whM) + ORIGIN.nparray()
 
   pygame.draw.polygon(screen, RECTCOLOR, convertAxis([
-    (ORIGIN.x,     ORIGIN.y),
-    (rotVec[0, 0] * RECT_WIDTH + ORIGIN.x, rotVec[1, 0] * RECT_HEIGHT + ORIGIN.y),
-    (resultVec[0], resultVec[1]),
-    (rotVec[0, 1] * RECT_WIDTH + ORIGIN.x, rotVec[1, 1] * RECT_HEIGHT + ORIGIN.y)
+    (ORIGIN.x,   ORIGIN.y),
+    (rotM[0, 0] * RECT_WIDTH + ORIGIN.x, rotM[1, 0] * RECT_HEIGHT + ORIGIN.y),
+    (resultM[0], resultM[1]),
+    (rotM[0, 1] * RECT_WIDTH + ORIGIN.x, rotM[1, 1] * RECT_HEIGHT + ORIGIN.y)
   ]))
   # === === #
 

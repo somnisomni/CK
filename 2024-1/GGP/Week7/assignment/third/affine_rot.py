@@ -6,9 +6,6 @@ class Point:
     self.x = x
     self.y = y
 
-  def nparray(self):
-    return np.array([self.x, self.y, 0])
-
 SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 720
 CENTER_POINT = Point(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
@@ -46,22 +43,22 @@ while running:
   RECTCOLOR = (255, 0, 0)
   ROT_DEGREES = 30
 
-  whVec = np.array([RECT_WIDTH,
-                    RECT_HEIGHT,
-                    1])
-  rotVec = np.array([
-    [np.cos(np.radians(ROT_DEGREES)), -np.sin(np.radians(ROT_DEGREES)), 0],
-    [np.sin(np.radians(ROT_DEGREES)),  np.cos(np.radians(ROT_DEGREES)), 0],
+  whM = np.array([RECT_WIDTH,
+                  RECT_HEIGHT,
+                  1])
+  rotM = np.array([
+    [np.cos(np.radians(ROT_DEGREES)), -np.sin(np.radians(ROT_DEGREES)), ORIGIN.x],
+    [np.sin(np.radians(ROT_DEGREES)),  np.cos(np.radians(ROT_DEGREES)), ORIGIN.y],
     [0, 0, 1]
   ])
 
-  resultVec = np.matmul(rotVec, whVec) + ORIGIN.nparray()
+  resultM = np.matmul(rotM, whM)
 
   pygame.draw.polygon(screen, RECTCOLOR, convertAxis([
-    (ORIGIN.x,     ORIGIN.y),
-    (rotVec[0, 0] * RECT_WIDTH + ORIGIN.x, rotVec[1, 0] * RECT_HEIGHT + ORIGIN.y),
-    (resultVec[0], resultVec[1]),
-    (rotVec[0, 1] * RECT_WIDTH + ORIGIN.x, rotVec[1, 1] * RECT_HEIGHT + ORIGIN.y)
+    (ORIGIN.x,   ORIGIN.y),
+    ((rotM[0, 0] * RECT_WIDTH) + ORIGIN.x, (rotM[1, 0] * RECT_HEIGHT) + ORIGIN.y),
+    (resultM[0], resultM[1]),
+    ((rotM[0, 1] * RECT_WIDTH) + ORIGIN.x, (rotM[1, 1] * RECT_HEIGHT) + ORIGIN.y)
   ]))
   # === === #
 

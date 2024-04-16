@@ -46,18 +46,18 @@ while running:
   RECTCOLOR = (255, 0, 0)
   MULTIPLIER = 2
 
-  whVec = np.array([RECT_WIDTH,
-                    RECT_HEIGHT])
-  mulVec = np.array([[MULTIPLIER, 0],
-                    [0, MULTIPLIER]])
+  whM = np.array([RECT_WIDTH,
+                  RECT_HEIGHT])
+  mulM = np.array([[MULTIPLIER, 0],
+                   [0, MULTIPLIER]])
 
-  resultVec = np.matmul(mulVec, whVec) + ORIGIN.nparray()
+  resultM = np.matmul(mulM, whM) + ORIGIN.nparray()
 
   pygame.draw.polygon(screen, RECTCOLOR, convertAxis([
-    (ORIGIN.x,     ORIGIN.y),
-    (ORIGIN.x,     resultVec[1]),
-    (resultVec[0], resultVec[1]),
-    (resultVec[0], ORIGIN.y)
+    (ORIGIN.x,   ORIGIN.y),
+    (ORIGIN.x,   resultM[1]),
+    (resultM[0], resultM[1]),
+    (resultM[0], ORIGIN.y)
   ]))
   # === === #
 

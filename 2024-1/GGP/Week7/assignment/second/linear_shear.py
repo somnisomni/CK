@@ -44,20 +44,20 @@ while running:
   RECT_HEIGHT = 100
   ORIGIN = Point(0, 0)
   RECTCOLOR = (255, 0, 0)
-  TRANSLATE_AMOUNT = 0.5
+  SHEAR_X_AMOUNT = 0.5
 
-  whVec = np.array([RECT_WIDTH,
-                    RECT_HEIGHT])
-  transVec = np.array([[1, TRANSLATE_AMOUNT],
-                       [0, 1]])
+  whM = np.array([RECT_WIDTH,
+                  RECT_HEIGHT])
+  shearM = np.array([[1, SHEAR_X_AMOUNT],
+                     [0, 1]])
 
-  resultVec = np.matmul(transVec, whVec) + ORIGIN.nparray()
+  resultM = np.matmul(shearM, whM) + ORIGIN.nparray()
 
   pygame.draw.polygon(screen, RECTCOLOR, convertAxis([
-    (ORIGIN.x,     ORIGIN.y),
-    ((resultVec[0] - RECT_WIDTH), resultVec[1]),
-    (resultVec[0], resultVec[1]),
-    (whVec[0] + ORIGIN.x,     (resultVec[1] - RECT_HEIGHT))
+    (ORIGIN.x,   ORIGIN.y),
+    ((resultM[0] - RECT_WIDTH), resultM[1]),
+    (resultM[0], resultM[1]),
+    (whM[0] + ORIGIN.x, (resultM[1] - RECT_HEIGHT))
   ]))
   # === === #
 
