@@ -1,9 +1,22 @@
-﻿namespace GameServer;
+﻿using Newtonsoft.Json.Linq;
 
-class ServerMain {
-    static void Main(string[] args) {
-        Console.WriteLine("Hello, World!");
+namespace GameServer;
 
-        UDPServer.Instance.ToString();
+public static class ServerMain {
+    public static void Main(string[] args) {
+        UDPServer.Instance.OnReceive += OnReceive;
+
+        Thread pushThread = new(PushThreadFunc);
+        pushThread.Start();
+    }
+    
+    private static void OnReceive(object sender, JObject data) {
+        RequestController.TryProcess(data);
+    }
+    
+    private static void PushThreadFunc() {
+        while(true) {
+            Thread.Sleep(Constants.PUSH_INTERVAL);
+        }
     }
 }
