@@ -3,7 +3,7 @@
 public static class Constants {
     public const string ClientIdRequestString = "SESSION_REQUEST";
 
-    public const int PUSH_INTERVAL = 1000;
+    public const int PUSH_INTERVAL = 10000;
     
     public const string DBHost = "localhost";
     public const int DBPort = 9999;

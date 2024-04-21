@@ -18,16 +18,20 @@ public static class DatabaseUtility {
         return command.ExecuteReader();
     }
     
-    public static bool InsertOne(MySqlConnection connection, string tableName, Dictionary<string, string> data) {
+    public static long? InsertOne(MySqlConnection connection, string tableName, Dictionary<string, string> data) {
         List<string> fieldNames = new(), fieldValues = new();
         foreach(var item in data) {
             fieldNames.Add(MySqlHelper.EscapeString(item.Key));
             fieldValues.Add($"\"{MySqlHelper.EscapeString(item.Value)}\"");
         }
         
-        MySqlCommand command = DatabaseClient.Instance.Connection.CreateCommand();
+        using MySqlCommand command = DatabaseClient.Instance.Connection.CreateCommand();
         command.CommandText = $"INSERT INTO {tableName} ({string.Join(",", fieldNames)}) VALUES ({string.Join(",", fieldValues)})";
 
-        return command.ExecuteNonQuery() == 1;
+        if(command.ExecuteNonQuery() == 1) {
+            return command.LastInsertedId;
+        }
+
+        return null;
     }
 }

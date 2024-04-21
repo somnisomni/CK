@@ -19,6 +19,7 @@ public sealed class UDPServer: IDisposable {
     private readonly object lockObj = new();
     private UdpClient? listener = null;
     private readonly Dictionary<uint, IPEndPoint> clients = new();
+    public readonly Dictionary<uint, (int dbId, string name)> clientDbIdMap = new();
     private readonly Queue<(uint clientId, byte[] data)> sendQueue = new();
     
     private readonly CancellationTokenSource threadCancelToken = new();
@@ -121,6 +122,11 @@ public sealed class UDPServer: IDisposable {
             }
             
             if(sendData.clientId == 0) {
+                if(clients.Count <= 0) {    
+                    Console.WriteLine("[UDP/WARN] No clients registered, ignoring send to all request.");
+                    continue;
+                }
+                
                 Console.WriteLine($"[UDP] Sending {sendData.data.Length} byte(s) to ALL clients \n" 
                                 + $"      Data: {Encoding.UTF8.GetString(sendData.data)}");
                 
@@ -157,11 +163,17 @@ public sealed class UDPServer: IDisposable {
         );
     }
 
+    public void RegisterClientWithDbId(uint clientId, int dbId, string name) {
+        clientDbIdMap[clientId] = (dbId, name);
+    }
+
     private void OnClientShutdown(object? sender, JObject data) {
         if(data.ParseMessage<NotifyClientShutdown>() is not { } message
            || !clients.ContainsKey(message.ClientId)) return;
         
         clients.Remove(message.ClientId);
+        clientDbIdMap.Remove(message.ClientId);
+        
         Console.WriteLine($"[UDP] Client {message.ClientId} disconnected, removed from client list.");
     }
     
