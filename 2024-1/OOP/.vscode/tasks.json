@@ -2,7 +2,7 @@
   "tasks": [
     {
       "type": "cppbuild",
-      "label": "C/C++: g++-13 활성 파일 빌드",
+      "label": "[macOS] C/C++: g++-13 활성 파일 빌드",
       "command": "/opt/homebrew/bin/g++-13",
       "args": [
         "-fdiagnostics-color=always",
@@ -16,6 +16,26 @@
       },
       "problemMatcher": [
         "$gcc"
+      ],
+      "group": "build",
+      "detail": "디버거에서 생성된 작업입니다."
+    },
+    {
+      "type": "cppbuild",
+      "label": "[Windows] C/C++: cl.exe 활성 파일 빌드",
+      "command": "cl.exe",
+      "args": [
+        "/Zi",
+        "/EHsc",
+        "/nologo",
+        "/Fe${fileDirname}\\${fileBasenameNoExtension}.exe",
+        "${file}"
+      ],
+      "options": {
+        "cwd": "${fileDirname}"
+      },
+      "problemMatcher": [
+        "$msCompile"
       ],
       "group": {
         "kind": "build",
