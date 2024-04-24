@@ -26,6 +26,7 @@ public sealed class UDPServer: IDisposable {
     private Thread receiveThread = null;
     private Thread sendThread = null;
 
+    public event EventHandler<uint>? OnNewClientConnect;
     public event EventHandler<JObject>? OnReceive;
     public event EventHandler? OnSendComplete;
 
@@ -88,12 +89,15 @@ public sealed class UDPServer: IDisposable {
                     ClientId = randomClientId
                 });
                 Console.WriteLine($"[UDP] Client {randomClientId} registered, sending ID back to client");
-
+                
+                OnNewClientConnect?.Invoke(this, randomClientId);
                 continue;
             }
 
             if(clients.ContainsValue(remoteEndPoint)) {
                 OnReceive?.Invoke(this, JObject.Parse(Encoding.UTF8.GetString(data)));
+            } else {
+                Console.WriteLine($"[UDP/WARN] Received data from unregistered client {remoteEndPoint}, ignoring.");
             }
         }
     }
@@ -185,6 +189,10 @@ public sealed class UDPServer: IDisposable {
         listener = null;
         
         clients.Clear();
+
+        OnNewClientConnect = null;
+        OnReceive = null;
+        OnSendComplete = null;
         
         _instance = null;
         GC.SuppressFinalize(this);

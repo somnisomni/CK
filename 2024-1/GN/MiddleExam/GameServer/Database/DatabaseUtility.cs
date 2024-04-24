@@ -3,6 +3,13 @@
 namespace GameServer.Database;
 
 public static class DatabaseUtility {
+    public static MySqlDataReader ExecuteQueryWithReader(MySqlConnection connection, string query) {
+        MySqlCommand command = DatabaseClient.Instance.Connection.CreateCommand();
+        command.CommandText = query;
+
+        return command.ExecuteReader();
+    }
+    
     public static MySqlDataReader SelectOne(MySqlConnection connection, string tableName, int id) {
         MySqlCommand command = DatabaseClient.Instance.Connection.CreateCommand();
         command.CommandText = $"SELECT * FROM {tableName} WHERE id = @id";
@@ -12,10 +19,7 @@ public static class DatabaseUtility {
     }
     
     public static MySqlDataReader SelectAll(MySqlConnection connection, string tableName) {
-        MySqlCommand command = DatabaseClient.Instance.Connection.CreateCommand();
-        command.CommandText = $"SELECT * FROM {tableName}";
-        
-        return command.ExecuteReader();
+        return ExecuteQueryWithReader(connection, $"SELECT * FROM {MySqlHelper.EscapeString(tableName)}");
     }
     
     public static long? InsertOne(MySqlConnection connection, string tableName, Dictionary<string, string> data) {

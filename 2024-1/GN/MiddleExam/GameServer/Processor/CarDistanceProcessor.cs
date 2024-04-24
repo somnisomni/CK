@@ -8,6 +8,7 @@ public class CarDistanceProcessor : ProcessorBase {
     public override bool Process(JObject messageRaw) {
         var message = messageRaw.ParseMessage<NotifyCarDistance>()!;
         
+        // Insert record
         DatabaseUtility.InsertOne(
             connection: DatabaseClient.Instance.Connection,
             tableName: TableNames.Records,
@@ -18,6 +19,11 @@ public class CarDistanceProcessor : ProcessorBase {
                 { "dragTimespan", message.Message.DragTimespan.ToString() }
             }
         );
+        
+        // Send rank to all client
+        if(message.Message.Distance >= 0) {
+            PushGameInitialData.QueueSendRankData(0);
+        }
 
         return true;
     }
