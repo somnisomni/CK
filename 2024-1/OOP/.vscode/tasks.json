@@ -2,8 +2,8 @@
   "tasks": [
     {
       "type": "cppbuild",
-      "label": "[macOS] C/C++: g++-13 활성 파일 빌드",
-      "command": "/opt/homebrew/bin/g++-13",
+      "label": "[macOS] C/C++: g++-14 활성 파일 빌드",
+      "command": "/opt/homebrew/bin/g++-14",
       "args": [
         "-fdiagnostics-color=always",
         "-g",
