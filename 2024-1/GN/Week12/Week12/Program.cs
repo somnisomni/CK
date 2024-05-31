@@ -1,22 +1,34 @@
-﻿public class Program {
-    public static void Main(string[] args) {
-        DateTime before = DateTime.Now;
-        Sum();
-        DateTime after = DateTime.Now;
-        
-        long gap = after.Ticks - before.Ticks;
-        
-        Console.WriteLine("Total ticks: " + gap);
-        Console.WriteLine("Total milliseconds: " + gap / 10_000);
-        Console.WriteLine("Seconds: " + gap / 10_000 / 1_000);
-    }
+﻿using System.Collections.Concurrent;
 
-    private static long Sum() {
-        long sum = 0;
-        for(int i = 0; i < 100_000_000; i++) {
-            sum += i;
-        }
+public class Program {
+    public static void Main() {
+        var dict = new ConcurrentDictionary<int, string>();
 
-        return sum;
+        Task t1 = Task.Factory.StartNew(() => {
+            int key = 0;
+
+            while(key++ < 100) {
+                if(dict.TryAdd(key, "Value" + key)) {
+                    Console.WriteLine("added key: " + key);
+                }
+                
+                Thread.Sleep(100);
+            }
+        });
+
+        Task t2 = Task.Factory.StartNew(() => {
+            int key = 0;
+            string value;
+
+            while(key++ < 100) {
+                if(dict.TryGetValue(key, out value)) {
+                    Console.WriteLine("read key: " + key + " value: " + value);
+                }
+                
+                Thread.Sleep(125);
+            }
+        });
+
+        Task.WaitAll(t1, t2);
     }
 }

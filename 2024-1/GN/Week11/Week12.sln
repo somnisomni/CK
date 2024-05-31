@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Week12", "Week12\Week12.csproj", "{E5CCF15B-CFD8-4E48-B3A8-62C774131669}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BitConverterTest", "BitConverterTest\BitConverterTest.csproj", "{A31C53FC-B422-42D7-AE87-1828A8B9315F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MemoryStreamTest", "MemoryStreamTest\MemoryStreamTest.csproj", "{389461A3-BD4F-478F-AD3F-2E3266569BFD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StreamWriterTest", "StreamWriterTest\StreamWriterTest.csproj", "{AAC53A75-3A3E-416C-896E-8E8571B7DAC3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E5CCF15B-CFD8-4E48-B3A8-62C774131669}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5CCF15B-CFD8-4E48-B3A8-62C774131669}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5CCF15B-CFD8-4E48-B3A8-62C774131669}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5CCF15B-CFD8-4E48-B3A8-62C774131669}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A31C53FC-B422-42D7-AE87-1828A8B9315F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A31C53FC-B422-42D7-AE87-1828A8B9315F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A31C53FC-B422-42D7-AE87-1828A8B9315F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A31C53FC-B422-42D7-AE87-1828A8B9315F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{389461A3-BD4F-478F-AD3F-2E3266569BFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{389461A3-BD4F-478F-AD3F-2E3266569BFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{389461A3-BD4F-478F-AD3F-2E3266569BFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{389461A3-BD4F-478F-AD3F-2E3266569BFD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AAC53A75-3A3E-416C-896E-8E8571B7DAC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAC53A75-3A3E-416C-896E-8E8571B7DAC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AAC53A75-3A3E-416C-896E-8E8571B7DAC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAC53A75-3A3E-416C-896E-8E8571B7DAC3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
