@@ -171,21 +171,32 @@ if __name__ == "__main__":
 
     screen.fill(BGCOLOR)
 
-    # Calc
+    # Render
     for cube in cubes:
       renderMatrix = np.matmul(generateProjectionMatrix(CAMERA_FOV, WIDTH / HEIGHT, CAMERA_NEAR, CAMERA_FAR), \
-                              np.matmul(generateViewMatrix(CAMERA_POSITION, CAMERA_TARGET), \
-                                        generateModelMatrix(cube.worldPos, (1, 1, 1), (0, 0, 0))))
+                               np.matmul(generateViewMatrix(CAMERA_POSITION, CAMERA_TARGET), \
+                                         generateModelMatrix(cube.worldPos, (1, 1, 1), (0, 0, 0))))
       viewportMatrix = generateViewportMatrix(WIDTH, HEIGHT)
 
-      # Render
+      # Render points
       facePoints = cube.getFacePointsForRender(renderMatrix, viewportMatrix)
+
+      # Draw points
       for poly in facePoints:
         for point in poly:
-          pygame.draw.circle(screen, (0, 0, 0), point[:2], 5)
-        pygame.draw.polygon(screen, cube.color, poly, 1)
+          pygame.draw.circle(screen, (0, 0, 0), point[:2], 3)
+      # Draw fill
+      for poly in facePoints:
+        pygame.draw.polygon(screen, cube.color, poly)
 
-    CAMERA_POSITION = (200 * math.sin(currentFrame / FPS % FPS), 100 * math.sin(currentFrame / FPS % FPS), 300 * math.cos(currentFrame / FPS % FPS))
+    # Camera move (Comment below lines to disable camera movement)
+    CAMERA_POSITION = (
+      200 * math.sin(currentFrame / FPS % FPS),
+      100 * math.sin(currentFrame / FPS % FPS),
+      300 * math.cos(currentFrame / FPS % FPS)
+    )
+
+    # Update
     pygame.display.flip()
     pygame.time.delay(1000 // FPS)
     currentFrame += 1
