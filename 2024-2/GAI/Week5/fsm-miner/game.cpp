@@ -6,9 +6,10 @@ using namespace std;
 int main() {
   Miner miner("Kowalski");
 
-  for(int i = 0; i < 20; i++) {
+  for(int i = 0; i < 30; i++) {
     miner.update();
-    this_thread::sleep_for(800ms);
+    this_thread::sleep_for(500ms);
+    cout << endl;
   }
 
   cout << endl << "Game update complete" << endl;

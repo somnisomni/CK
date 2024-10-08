@@ -94,7 +94,7 @@ void MinerRestState::enter(Miner* entity) {
 
 void MinerRestState::execute(Miner* entity) {
   cout << entity->getName() << " is taking a rest, and sure, resting also costs some money" << endl;
-  entity->useMoney(random() % 3 + 1);
+  entity->useMoney(rand() % 5 + 1);
   cout << entity->getName() << " has " << entity->getMoney() << " money left" << endl;
 
   if(entity->getMoney() <= 0) {
