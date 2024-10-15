@@ -1,0 +1,66 @@
+syntax = "proto3";
+package Week6Assignment;
+
+message Item {
+  uint32 id = 1;
+  string name = 2;
+  uint32 quantity = 3;
+}
+
+message Inventory {
+  repeated Item item = 1;
+}
+
+message PlayerInfo {
+  uint32 id = 1;
+  string displayName = 2;
+  uint32 level = 3;
+  uint32 hp = 4;
+  optional Inventory inventory = 5;
+  optional bool isBanned = 6;
+}
+
+message ErrorResponse {
+  string message = 1;
+}
+
+message PlayerInfoResponse {
+  PlayerInfo player = 1;
+}
+
+message PlayerInventoryResponse {
+  uint32 playerId = 1;
+  Inventory inventory = 2;
+}
+
+message AllPlayersInfoResponse {
+  repeated PlayerInfo players = 1;
+}
+
+message PlayerInfoRequest {
+  uint32 id = 1;
+}
+
+message PlayerInventoryRequest {
+  uint32 id = 1;
+}
+
+message AllPlayersInfoRequest { }
+
+message WrappedRequestMessage {
+  oneof message {
+    PlayerInfoRequest playerInfoRequest = 1;
+    AllPlayersInfoRequest allPlayersInfoRequest = 2;
+    PlayerInventoryRequest playerInventoryRequest = 3;
+  }
+}
+
+message WrappedResponseMessage {
+  oneof message {
+    ErrorResponse errorResponse = 1;
+
+    PlayerInfoResponse playerInfoResponse = 2;
+    AllPlayersInfoResponse allPlayersInfoResponse = 3;
+    PlayerInventoryResponse playerInventoryResponse = 4;
+  }
+}
